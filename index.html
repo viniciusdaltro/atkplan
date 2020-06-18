@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TW2 Attack Planer</title>
+
+
+    <style>
+        html{
+            height: 100%;
+        }
+        body{
+            background: rgb(184, 161, 113);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            align-items: center;
+            align-content: center;
+            display: flex;
+            color:  rgb(44, 30, 21);
+        }
+        .decoBox{
+            width: 35%;
+            height: 50%;
+            margin: 0 auto;
+            margin-top: 10%;
+            position: relative;
+            background-color:  rgb(212, 186, 136);
+            border-radius: 5px;
+            border: 3px solid rgb(68, 46, 32);
+            padding: 1%;
+            
+        }
+
+        .item{
+            margin: 20px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .decoBox{
+                width:100%;
+            }
+        }
+
+         /* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+} 
+
+    </style>
+
+</head>
+<body>
+    <div class="decoBox">
+        <h1> Attack Planner</h1>
+        <h4> Tribal Wars 2</h4> 
+        <form method="get" >
+            <div class="item">
+                <label for="atk_duration">Duration: </label>
+                <input type="text" name="atk_duration" id="atkDuration" placeholder="h:m:s" onclick="calculate_atk()">
+            </div>
+            <div class="item">
+                <label for="target_hour">Target: </label>
+                <input type="text" name="target_hour" id="targetHour" placeholder="h:m:s" >
+            </div>
+            <div>
+                <p id="resulttext"></p>
+            </div>
+            
+            <input class="item" type="button" value="CALCULATE" onClick="calculate_atk()">
+        </form>
+    </div>
+
+    <script>
+        function getTimeInSeconds(str){
+            var hms = str.split(':');
+            var h = parseInt(hms[0]);
+            var m = parseInt(hms[1]);
+            var s = parseInt(hms[2]);
+            return h * 60 * 60 + m * 60 + s;
+        }
+
+        function showresult(value){
+            var h = Math.floor(value / 3600);
+            var m = Math.floor( (value - h * 3600) / 60 );
+            var s = value - h * 3600 + m * 60;
+            if(value < 0){
+            h = 24 + h % 24;
+            m = Math.abs(m % 60);
+            s = Math.abs(s % 60);
+            }
+            
+            
+            var result = h.toString() + "h " + m.toString() + "m " + s.toString() + "s";
+            
+            var txtBox = document.getElementById("resulttext");
+            txtBox.textContent = result;  
+        }
+
+        function calculate_atk(){
+            var strDuration = document.getElementById("atkDuration").value;
+            var strTarget   = document.getElementById("targetHour").value;
+
+            var duration = getTimeInSeconds(strDuration);
+            var target   = getTimeInSeconds(strTarget);
+            var result = target - duration;
+
+            showresult(result);
+        }
+    </script>
+</body>
+</html>
