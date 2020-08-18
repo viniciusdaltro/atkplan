@@ -18,8 +18,13 @@
             align-items: center;
             align-content: center;
             display: flex;
+            flex-direction: column;
             color:  rgb(44, 30, 21);
         }
+        hr{
+            color:  rgb(44, 30, 21);
+        }
+
         .decoBox{
             width: 35%;
             height: 50%;
@@ -109,7 +114,7 @@
                 <input type="text" name="atk_duration" id="atkDuration" placeholder="h:m:s" onclick="calculate_atk()">
             </div>
             <div class="item">
-                <label for="target_hour">Target: </label>
+                <label for="target_hour">Arrive: </label>
                 <input type="text" name="target_hour" id="targetHour" placeholder="h:m:s" >
             </div>
             <div>
@@ -119,6 +124,18 @@
             <input class="item" type="button" value="CALCULATE" onClick="calculate_atk()">
         </form>
     </div>
+    <div class="info">
+        <h2>Instructions</h2>
+
+        <p><strong>Duration</strong>: the attack duration in game.</p>
+        <p><strong>Arrive</strong>: specify the time you want the attack to arrives. from 00:00:00 to 23:59:59.</p>
+        <p><hr></p>
+        <h4>Quick Example</h4>
+        <p>durantion = 01:25:10</p>
+        <p>arrive = 23:59:00</p>
+        <p>The response is = Today at 22h 33m 50s</p>
+        <p></br>it means you should send your attack at 22h 33m 50s, so it arrives at 23:59:00. </p>
+    </div>
 
     <script>
         function getTimeInSeconds(str){
@@ -126,24 +143,23 @@
             var h = parseInt(hms[0]);
             var m = parseInt(hms[1]);
             var s = parseInt(hms[2]);
-            return h * 60 * 60 + m * 60 + s;
+            return (h * 60 * 60) + (m * 60) + s;
         }
 
         function showresult(value){
+          
             var h = Math.floor(value / 3600);
-            var m = Math.floor( (value - h * 3600) / 60 );
-            var s = value - h * 3600 + m * 60;
-            if(value < 0){
-            h = 24 + h % 24;
-            m = Math.abs(m % 60);
-            s = Math.abs(s % 60);
-            }
+            value -= h * 3600;
+            h = (24 + h) % 24;
+            var m = Math.floor( value / 60 );
+            value -= m * 60;
+            var s = value;
             
-            
-            var result = h.toString() + "h " + m.toString() + "m " + s.toString() + "s";
-            
+            var result = "Today at " + h.toString() + "h " + m.toString() + "m " + s.toString() + "s";
+
             var txtBox = document.getElementById("resulttext");
-            txtBox.textContent = result;  
+            txtBox.textContent = result;
+            
         }
 
         function calculate_atk(){
@@ -152,6 +168,9 @@
 
             var duration = getTimeInSeconds(strDuration);
             var target   = getTimeInSeconds(strTarget);
+            var days = Math.floor( duration / (3600 * 24) );
+            if( days >= 1)
+                target += days * 24 * 3600; 
             var result = target - duration;
 
             showresult(result);
